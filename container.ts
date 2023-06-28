@@ -129,4 +129,12 @@ export class Container {
     }
     return JSON.parse(res.body)
   }
+
+  async logs(id: string): Promise<InspectResponse> {
+    const res = await this.client.get(`/containers/${id}/logs`);
+    if (!res.body) {
+      return {};
+    }
+    return JSON.parse(res.body)
+  }
 }
