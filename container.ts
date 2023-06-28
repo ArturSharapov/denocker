@@ -130,7 +130,7 @@ export class Container {
     return JSON.parse(res.body)
   }
 
-  async logs(id: string, options?: {stdout?: true, stderr?: true}): Promise<InspectResponse> {
+  async logs(id: string, options?: {stdout?: true, stderr?: true}): Promise<string> {
     const stdout = options ? Boolean(options.stdout).toString() : "true"
     const stderr = options ? Boolean(options.stderr).toString() : "true"
     const res = await this.client.get(
@@ -138,8 +138,8 @@ export class Container {
       [{name: "stdout", value: stdout}, {name: "stderr", value: stderr}]
     );
     if (!res.body) {
-      return {};
+      return '';
     }
-    return JSON.parse(res.body)
+    return res.body
   }
 }
