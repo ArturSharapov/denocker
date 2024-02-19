@@ -1,7 +1,5 @@
-import {
-  assert,
-  assertEquals,
-} from "https://deno.land/std@0.150.0/testing/asserts.ts";
+import { assert } from "std/assert/assert.ts";
+import { assertEquals } from "std/assert/assert_equals.ts";
 
 import Docker from "../index.ts";
 import { retry } from "./helpers.ts";
