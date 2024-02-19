@@ -41,19 +41,19 @@ Deno.test("container list with labels", async () => {
   await docker.containers.create(crypto.randomUUID(), {
     Image: "ubuntu",
     Cmd: ["true"],
-    Labels: {"label1": "value1"}
-  })
+    Labels: { "label1": "value1" },
+  });
   await docker.containers.create(crypto.randomUUID(), {
     Image: "ubuntu",
     Cmd: ["true"],
-    Labels: {"label2": "value2"}
-  })
-  const containers = await docker.containers.list({all: true})
-  console.log(containers)
-  const filteredContainers = containers.filter(c => c.Labels?.["label1"] == "value1")
-  console.log(filteredContainers)
-  assertEquals(filteredContainers.length, 1)
-})
+    Labels: { "label2": "value2" },
+  });
+  const containers = await docker.containers.list({ all: true });
+  console.log(containers);
+  const filteredContainers = containers.filter((c) => c.Labels?.["label1"] == "value1");
+  console.log(filteredContainers);
+  assertEquals(filteredContainers.length, 1);
+});
 
 Deno.test("container stop", async () => {
   const { Id: id } = await docker.containers.create(crypto.randomUUID(), {
@@ -72,8 +72,8 @@ Deno.test("container stop", async () => {
       return (containerList.length == 0);
     },
     10,
-    2000
-  )
+    2000,
+  );
 });
 
 Deno.test("container wait", async () => {
@@ -113,8 +113,8 @@ Deno.test("container rm", async () => {
   await docker.containers.stop(id);
   await docker.containers.rm(id);
   containerList = await docker.containers.list({
-    filters: `{"id":["${ id }"]}`,
-    all: true
+    filters: `{"id":["${id}"]}`,
+    all: true,
   });
   assertEquals(containerList.length, 0);
 });
@@ -127,7 +127,7 @@ Deno.test("container inspect", async () => {
   });
   assert(typeof id === "string");
   const containerData = await docker.containers.inspect(id);
-  assert(containerData.Path === "true")
-  assert(containerData.State?.Status === "created")
-  assert(typeof containerData.GraphDriver?.Name === "string")
-})
+  assert(containerData.Path === "true");
+  assert(containerData.State?.Status === "created");
+  assert(typeof containerData.GraphDriver?.Name === "string");
+});

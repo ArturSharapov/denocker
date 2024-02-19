@@ -1,4 +1,4 @@
-import { Port, HostConfig, Mount, NetworkSettings } from "./container.ts";
+import { HostConfig, Mount, NetworkSettings, Port } from "./container.ts";
 
 export interface ListContainerResponse {
   Id?: string;

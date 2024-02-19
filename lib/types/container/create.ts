@@ -1,4 +1,4 @@
-import { HostConfig, HealthConfig, NetworkSettings } from './container.ts'
+import { HealthConfig, HostConfig, NetworkSettings } from "./container.ts";
 
 export interface ContainerCreate {
   // The hostname to use for the container, as a valid RFC 1123 hostname.

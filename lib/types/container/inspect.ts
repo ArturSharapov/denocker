@@ -1,9 +1,4 @@
-import {
-  Mount,
-  HostConfig,
-  NetworkSettings,
-  HealthStatus, HealthConfig
-} from "./container.ts";
+import { HealthConfig, HealthStatus, HostConfig, Mount, NetworkSettings } from "./container.ts";
 
 interface State {
   Status?: string;
@@ -38,7 +33,7 @@ interface ContainerConfig {
   Image?: string;
   Volumes?: Record<string, Record<never, never>>;
   WorkingDir?: string;
-  EntryPoint?: Array<string>
+  EntryPoint?: Array<string>;
   NetworkDisabled?: boolean | null;
   MacAddress?: boolean | null;
   OnBuild?: Array<string> | null;
@@ -69,7 +64,7 @@ export interface InspectResponse {
   AppArmorProfile?: string;
   ExecIDs?: Array<string> | null;
   HostConfig?: HostConfig;
-  GraphDriver?: {Name: string; Data: Record<string, string>}
+  GraphDriver?: { Name: string; Data: Record<string, string> };
   SizeRw?: number;
   SizeRootFs?: number;
   Mounts?: Mount[];

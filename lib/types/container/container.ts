@@ -1,7 +1,5 @@
 /*
-*
-* Networking
-*
+ * Networking
  */
 
 interface EndpointIPAMConfig {
@@ -51,9 +49,7 @@ interface NetworkSettings {
 }
 
 /*
-*
-* FileSystem
-*
+ * FileSystem
  */
 
 interface BindOptions {
@@ -121,14 +117,7 @@ interface HealthConfig {
 interface HealthStatus {
   Status?: string;
   FailingStreak?: number;
-  Log: Array<unknown>
+  Log: Array<unknown>;
 }
 
-export type {
-  Port,
-  HostConfig,
-  NetworkSettings,
-  Mount,
-  HealthConfig,
-  HealthStatus
-};
+export type { HealthConfig, HealthStatus, HostConfig, Mount, NetworkSettings, Port };

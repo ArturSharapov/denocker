@@ -70,7 +70,7 @@ export class HttpClient {
     const dec = new TextDecoder();
     let finished = false;
     let body = "";
-    const headers = res!.headers;
+    const headers = res.headers;
 
     if (headers!["Transfer-Encoding"] === "chunked") {
       while (!finished) {
@@ -86,7 +86,7 @@ export class HttpClient {
         }
       }
     } else {
-      const bufsize = parseInt(res?.headers!["Content-Length"], 10);
+      const bufsize = parseInt(res.headers!["Content-Length"], 10);
       const buf = new ArrayBuffer(bufsize);
       const arr = new Uint8Array(buf);
       await this.read(arr);
@@ -114,9 +114,7 @@ export class HttpClient {
   }
 
   async sendRequest(request: HttpRequest): Promise<HttpResponse> {
-    const head = `${request.method} ${request.path}?${
-      this.buildQueryString(request.query)
-    } HTTP/1.1\r\n`;
+    const head = `${request.method} ${request.path}?${this.buildQueryString(request.query)} HTTP/1.1\r\n`;
     if (request.body.length > 0) {
       request.headers["Content-length"] = request.body.length.toString();
       request.headers["Content-type"] = "application/json";

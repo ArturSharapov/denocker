@@ -1,7 +1,8 @@
 import {
-  ListContainerResponse,
   ContainerCreate,
-  ContainerCreateResponse, InspectResponse,
+  ContainerCreateResponse,
+  InspectResponse,
+  ListContainerResponse,
 } from "./lib/types/container/mod.ts";
 import { DockerClient } from "./lib/client/client.ts";
 
@@ -25,10 +26,10 @@ export class Container {
 
   async list(options?: ListOptions): Promise<ListContainerResponse[]> {
     const res = await this.client.get("/containers/json", [
-      {name: "all", value: options?.all ? "true" : ""},
-      {name: "limit", value: options?.limit ? options.limit.toString() : ""},
-      {name: "size", value: options?.size ? options.size.toString() : ""},
-      {name: "filters", value: options?.filters ?? ""},
+      { name: "all", value: options?.all ? "true" : "" },
+      { name: "limit", value: options?.limit ? options.limit.toString() : "" },
+      { name: "size", value: options?.size ? options.size.toString() : "" },
+      { name: "filters", value: options?.filters ?? "" },
     ]);
     if (!res.body || !res.body.length) {
       return [];
@@ -122,24 +123,24 @@ export class Container {
   async inspect(id: string, size = false): Promise<InspectResponse> {
     const res = await this.client.get(
       `/containers/${id}/json`,
-      [{name: "size", value: (Boolean(size)).toString()}]
+      [{ name: "size", value: (Boolean(size)).toString() }],
     );
     if (!res.body) {
       return {};
     }
-    return JSON.parse(res.body)
+    return JSON.parse(res.body);
   }
 
-  async logs(id: string, options?: {stdout?: true, stderr?: true}): Promise<string> {
-    const stdout = options ? Boolean(options.stdout).toString() : "true"
-    const stderr = options ? Boolean(options.stderr).toString() : "true"
+  async logs(id: string, options?: { stdout?: true; stderr?: true }): Promise<string> {
+    const stdout = options ? Boolean(options.stdout).toString() : "true";
+    const stderr = options ? Boolean(options.stderr).toString() : "true";
     const res = await this.client.get(
       `/containers/${id}/logs`,
-      [{name: "stdout", value: stdout}, {name: "stderr", value: stderr}]
+      [{ name: "stdout", value: stdout }, { name: "stderr", value: stderr }],
     );
     if (!res.body) {
-      return '';
+      return "";
     }
-    return res.body
+    return res.body;
   }
 }

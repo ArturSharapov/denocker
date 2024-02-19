@@ -1,18 +1,18 @@
-import * as base64 from "https://deno.land/x/base64@v0.2.1/mod.ts";
-import { HttpClient, HttpQuery, HttpRequest, HttpResponse } from "./httpClient.ts";
+import * as base64 from "base64";
 import { RegistryAuth } from "./auth.ts";
+import { HttpClient, HttpQuery, HttpRequest, HttpResponse } from "./httpClient.ts";
 
 export class DockerClient {
-  options: Deno.ConnectOptions|Deno.UnixConnectOptions;
+  options: Deno.ConnectOptions | Deno.UnixConnectOptions;
   authConfig: RegistryAuth | null;
   client: () => Promise<HttpClient>;
 
-  constructor(options: string|Deno.ConnectOptions, authConfig: RegistryAuth | null = null) {
-    if(typeof options == "string"){
+  constructor(options: string | Deno.ConnectOptions, authConfig: RegistryAuth | null = null) {
+    if (typeof options == "string") {
       this.options = {
         transport: "unix",
-        path: options
-      }
+        path: options,
+      };
     } else {
       this.options = options;
     }
@@ -24,12 +24,12 @@ export class DockerClient {
     let conn: Deno.Conn;
     if ("path" in this.options) {
       conn = await Deno.connect(
-        this.options as Deno.UnixConnectOptions
+        this.options as Deno.UnixConnectOptions,
       );
     } else {
       conn = await Deno.connect(
-        this.options as Deno.ConnectOptions
-      )
+        this.options as Deno.ConnectOptions,
+      );
     }
     return new HttpClient(conn);
   }
@@ -42,10 +42,10 @@ export class DockerClient {
   ): Promise<HttpResponse> {
     const client = await this.client();
     const enc = new TextEncoder();
-    const headers: {[key: string]: string} = {
+    const headers: { [key: string]: string } = {
       "Host": "docker",
       "Accept": "application/json",
-    }
+    };
     if (this.authConfig) {
       headers["X-Registry-Auth"] = base64.fromUint8Array(enc.encode(JSON.stringify(this.authConfig)));
     }
