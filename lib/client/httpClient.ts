@@ -68,35 +68,36 @@ export class HttpClient {
 
   async readBody(res: HttpResponse) {
     const dec = new TextDecoder();
-    let finished = false;
     let body = "";
     const headers = res.headers;
 
     if (headers!["Transfer-Encoding"] === "chunked") {
-      while (!finished) {
+      while (true) {
+        // "ab01\r\n"  <-- determines the *total* size of the following chunks to send
         const bufsize = parseInt(await this.readLine(), 16);
-        if (bufsize === 0) {
-          finished = true;
-        } else {
-          const buf = new ArrayBuffer(bufsize);
-          const arr = new Uint8Array(buf);
-          await this.read(arr);
-          body += dec.decode(arr);
-          await this.readLine();
+
+        // "0\r\n"  <-- bufsize is 0 => end of stream
+        if (bufsize === 0) break;
+
+        let bytesRead = 0;
+        while (bytesRead < bufsize) {
+          const arr = new Uint8Array(bufsize - bytesRead);
+          const chunkSize = await this.conn.read(arr) ?? 0;
+          bytesRead += chunkSize;
+          // you never know the size of actual data inside the chunk until receiving => "cut" it with no mem/perf cost
+          const text = dec.decode(arr.subarray(0, chunkSize));
+          body += text;
         }
+        // "\r\n"  <-- empty line after data-chunks (skip it)
+        await this.readLine();
       }
     } else {
       const bufsize = parseInt(res.headers!["Content-Length"], 10);
-      const buf = new ArrayBuffer(bufsize);
-      const arr = new Uint8Array(buf);
-      await this.read(arr);
+      const arr = new Uint8Array(bufsize);
+      await this.conn.read(arr);
       body += dec.decode(arr);
     }
     res.body = body;
-  }
-
-  read(buf: Uint8Array) {
-    return this.conn.read(buf);
   }
 
   send(data: string) {
@@ -121,7 +122,7 @@ export class HttpClient {
     }
     const headers = this.buildHeaders(request.headers);
     const reqString = head + headers + "\r\n\r\n" + request.body;
-    //console.log(reqString);
+    // console.log(JSON.stringify(reqString));
     await this.send(reqString);
     const response: HttpResponse = {};
     await this.readHead(response);
