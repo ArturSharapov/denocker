@@ -33,16 +33,16 @@ export class HttpClient {
   }
 
   async readLine() {
-    const dec = new TextDecoder();
     this.res = "";
     this.buf = new Uint8Array(1);
 
     while (true) {
-      if (this.res.indexOf("\n") !== -1) {
+      await this.conn.read(this.buf);
+      const char = String.fromCharCode(this.buf[0]);
+      this.res += char;
+      if (char === "\n") {
         return this.res.slice(0, this.res.length - 2);
       }
-      await this.conn.read(this.buf);
-      this.res += dec.decode(this.buf);
     }
   }
 
