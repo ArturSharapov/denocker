@@ -1,4 +1,4 @@
-import * as base64 from "base64";
+import * as base64 from "https://deno.land/x/base64@v0.2.1/mod.ts";
 import { RegistryAuth } from "./auth.ts";
 import { HttpClient, HttpQuery, HttpRequest, HttpResponse } from "./httpClient.ts";
 
