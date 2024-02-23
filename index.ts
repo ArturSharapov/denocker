@@ -7,7 +7,7 @@ export default class Docker {
   containers: Container;
   images: Image;
 
-  constructor(options: string | Deno.ConnectOptions, auth: RegistryAuth | null = null) {
+  constructor(options: string | Deno.ConnectOptions = "/var/run/docker.sock", auth: RegistryAuth | null = null) {
     const client = new DockerClient(options, auth);
     this.containers = new Container(client);
     this.images = new Image(client);
