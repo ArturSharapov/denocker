@@ -42,6 +42,14 @@ interface Port {
 
 interface HostConfig {
   NetworkMode?: string;
+  Mounts?: {
+    Type?: "bind";
+    Source?: string;
+    Target?: string;
+    RW?: true;
+    Propagation?: "rprivate";
+  }[];
+  PortBindings?: Record<string, { HostPort: string }[]>;
 }
 
 interface NetworkSettings {
