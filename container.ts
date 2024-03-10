@@ -108,11 +108,15 @@ export class Container {
     return JSON.parse(res.body);
   }
 
-  async rm(id: string, condition = "not-running") {
+  async rm(id: string, options?: { v?: true; force?: true; link?: true }) {
     const res = await this.client.delete(
       `/containers/${id}`,
       "",
-      [{ name: "condition", value: condition }],
+      [
+        { name: "v", value: options?.v ? "true" : "" },
+        { name: "force", value: options?.force ? "true" : "" },
+        { name: "link", value: options?.link ? "true" : "" },
+      ],
     );
     if (!res.body || !res.body.length) {
       return {};
