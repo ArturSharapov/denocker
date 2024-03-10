@@ -41,10 +41,10 @@ export class Image {
 
   async list(options?: ListOptions): Promise<ListImageResponse[]> {
     const res = await this.client.get("/images/json", [
-      { name: "all", value: options?.all ? "true" : "" },
+      // { name: "all", value: options?.all ? "true" : "false" },
       { name: "filters", value: options?.filters ? options.filters.toString() : "" },
-      { name: "shared-size", value: options?.sharedSize ? options.sharedSize.toString() : "" },
-      { name: "digests", value: options?.digests ? "true" : "" },
+      // { name: "shared-size", value: options?.sharedSize ? options.sharedSize.toString() : "" },
+      // { name: "digests", value: options?.digests ? "true" : "" },
     ]);
     if (!res.body || !res.body.length) {
       return [];
